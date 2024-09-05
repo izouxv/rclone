@@ -154,7 +154,7 @@ done by the permissions on the socket.
 			fs.Debugf(f, "Using hash %v for ETag", Opt.HashType)
 		}
 		cmd.Run(false, false, command, func() error {
-			s, err := newWebDAV(context.Background(), f, &Opt)
+			s, err := NewWebDAV(context.Background(), f, &Opt)
 			if err != nil {
 				return err
 			}
@@ -195,8 +195,25 @@ type WebDAV struct {
 // check interface
 var _ webdav.FileSystem = (*WebDAV)(nil)
 
+func NewWebDAV2(ctx context.Context, f fs.Fs, opt *Options) (w *WebDAV, err error) {
+	w = &WebDAV{
+		f:   f,
+		ctx: ctx,
+		opt: *opt,
+	}
+	if proxyflags.Opt.AuthProxy != "" {
+		w.proxy = proxy.New(ctx, &proxyflags.Opt)
+		// override auth
+		w.opt.Auth.CustomAuthFn = w.auth
+	} else {
+		w._vfs = vfs.New(f, &vfscommon.Opt)
+	}
+
+	return w, nil
+}
+
 // Make a new WebDAV to serve the remote
-func newWebDAV(ctx context.Context, f fs.Fs, opt *Options) (w *WebDAV, err error) {
+func NewWebDAV(ctx context.Context, f fs.Fs, opt *Options) (w *WebDAV, err error) {
 	w = &WebDAV{
 		f:   f,
 		ctx: ctx,
