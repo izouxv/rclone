@@ -354,6 +354,8 @@ func (acc *Account) accountRead(n int) {
 
 	acc.stats.Bytes(int64(n))
 
+	Event(Progress, acc.stats)
+
 	TokenBucket.LimitBandwidth(TokenBucketSlotAccounting, n)
 	acc.limitPerFileBandwidth(n)
 }
