@@ -213,6 +213,11 @@ func NewWebDAV2(ctx context.Context, f fs.Fs, opt *Options, vfsOpt *vfscommon.Op
 	return w, nil
 }
 
+func (w *WebDAV) Close() error {
+	w._vfs.Shutdown()
+	return nil
+}
+
 // Make a new WebDAV to serve the remote
 func NewWebDAV(ctx context.Context, f fs.Fs, opt *Options) (w *WebDAV, err error) {
 	w = &WebDAV{
