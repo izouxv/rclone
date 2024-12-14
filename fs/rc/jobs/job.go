@@ -126,6 +126,10 @@ var (
 	executeID = uuid.New().String()
 )
 
+func JOBS() *Jobs {
+	return running
+}
+
 // newJobs makes a new Jobs structure
 func newJobs() *Jobs {
 	return &Jobs{
