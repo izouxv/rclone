@@ -195,24 +195,6 @@ type WebDAV struct {
 // check interface
 var _ webdav.FileSystem = (*WebDAV)(nil)
 
-func NewWebDAV2(ctx context.Context, f fs.Fs, opt *Options, vfsOpt *vfscommon.Options) (w *WebDAV, err error) {
-	w = &WebDAV{
-		f:   f,
-		ctx: ctx,
-		opt: *opt,
-	}
-	if proxyflags.Opt.AuthProxy != "" {
-		w.proxy = proxy.New(ctx, &proxyflags.Opt)
-		// override auth
-		w.opt.Auth.CustomAuthFn = w.auth
-	} else {
-		// w._vfs = vfs.New(f, &vfscommon.Opt)
-		w._vfs = vfs.New(f, vfsOpt)
-	}
-
-	return w, nil
-}
-
 func (w *WebDAV) Close() error {
 	w._vfs.Shutdown()
 	return nil
