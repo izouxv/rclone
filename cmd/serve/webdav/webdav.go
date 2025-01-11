@@ -213,7 +213,9 @@ func NewWebDAV2(ctx context.Context, f fs.Fs, opt *Options) (w *WebDAV, err erro
 }
 
 func (w *WebDAV) Close() error {
-	w._vfs.Shutdown()
+	if w._vfs != nil {
+		w._vfs.Shutdown()
+	}
 	return nil
 }
 
