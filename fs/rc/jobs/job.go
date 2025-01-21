@@ -37,7 +37,7 @@ type Job struct {
 	Duration  float64   `json:"duration"`
 	Output    rc.Params `json:"output"`
 	Stop      func()    `json:"-"`
-	listeners []*func()
+	listeners []*func(interface{})
 
 	// realErr is the Error before printing it as a string, it's used to return
 	// the real error to the upper application layers while still printing the
@@ -67,14 +67,14 @@ func (job *Job) finish(out rc.Params, err error) {
 
 	// Notify listeners that the job is finished
 	for i := range job.listeners {
-		go (*job.listeners[i])()
+		go (*job.listeners[i])(job)
 	}
 
 	job.mu.Unlock()
 	running.kickExpire() // make sure this job gets expired
 }
 
-func (job *Job) removeListener(fn *func()) {
+func (job *Job) removeListener(fn *func(interface{})) {
 	job.mu.Lock()
 	defer job.mu.Unlock()
 	for i, ln := range job.listeners {
@@ -87,11 +87,11 @@ func (job *Job) removeListener(fn *func()) {
 
 // OnFinish adds listener to job that will be triggered when job is finished.
 // It returns a function to cancel listening.
-func (job *Job) OnFinish(fn func()) func() {
+func (job *Job) OnFinish(fn func(interface{})) func() {
 	job.mu.Lock()
 	defer job.mu.Unlock()
 	if job.Finished {
-		go fn()
+		go fn(job)
 	} else {
 		job.listeners = append(job.listeners, &fn)
 	}
@@ -328,7 +328,7 @@ func NewJob(ctx context.Context, fn rc.Func, in rc.Params) (job *Job, out rc.Par
 
 // OnFinish adds listener to jobid that will be triggered when job is finished.
 // It returns a function to cancel listening.
-func OnFinish(jobID int64, fn func()) (func(), error) {
+func OnFinish(jobID int64, fn func(interface{})) (func(), error) {
 	job := running.Get(jobID)
 	if job == nil {
 		return func() {}, errors.New("job not found")
