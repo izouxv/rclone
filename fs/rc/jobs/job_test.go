@@ -523,7 +523,7 @@ func TestOnFinish(t *testing.T) {
 	job, _, err := NewJob(ctx, ctxParmFn(ctx, false), rc.Params{"_async": true})
 	assert.NoError(t, err)
 
-	stop, err := OnFinish(job.ID, func() { close(done) })
+	stop, err := OnFinish(job.ID, func(interface{}) { close(done) })
 	defer stop()
 	assert.NoError(t, err)
 
@@ -544,7 +544,7 @@ func TestOnFinishAlreadyFinished(t *testing.T) {
 	job, _, err := NewJob(ctx, shortFn, rc.Params{})
 	assert.NoError(t, err)
 
-	stop, err := OnFinish(job.ID, func() { close(done) })
+	stop, err := OnFinish(job.ID, func(interface{}) { close(done) })
 	defer stop()
 	assert.NoError(t, err)
 
@@ -569,7 +569,7 @@ func TestOnFinishDataRace(t *testing.T) {
 			case <-stop:
 				break Loop
 			default:
-				_, err := OnFinish(job.ID, func() {
+				_, err := OnFinish(job.ID, func(interface{}) {
 					finished <- struct{}{}
 				})
 				assert.NoError(t, err)
