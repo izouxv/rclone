@@ -77,6 +77,9 @@ func writeError(path string, in rc.Params, err error, status int) (string, int) 
 // operations/uploadfile and core/command are not supported as they need request or response object
 // modified from handlePost in rcserver.go
 func RPC(method string, input string) (output string, status int) {
+	return RPC2(method, input, context.Background())
+}
+func RPC2(method string, input string, ctx context.Context) (output string, status int) {
 	in := make(rc.Params)
 
 	// Catch panics
@@ -114,7 +117,7 @@ func RPC(method string, input string) (output string, status int) {
 
 	fs.Debugf(nil, "rc: %q: with parameters %+v", method, in)
 
-	_, out, err := jobs.NewJob(context.Background(), call.Fn, in)
+	_, out, err := jobs.NewJob(ctx, call.Fn, in)
 	if err != nil {
 		return writeError(method, in, err, http.StatusInternalServerError)
 	}
