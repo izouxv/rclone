@@ -217,7 +217,7 @@ func getAsync(ctx context.Context, in rc.Params) (context.Context, bool, error) 
 	delete(in, "_async") // remove the async parameter after parsing
 	if isAsync {
 		// unlink this job from the current context
-		ctx = context.Background()
+		//ctx = context.Background()
 	}
 	return ctx, isAsync, nil
 }

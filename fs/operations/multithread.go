@@ -201,6 +201,7 @@ func multiThreadCopy(ctx context.Context, f fs.Fs, remote string, src fs.Object,
 	if concurrency < 1 {
 		concurrency = 1
 	}
+	// concurrency = 1
 
 	g, gCtx := errgroup.WithContext(uploadCtx)
 	g.SetLimit(concurrency)
