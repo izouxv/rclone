@@ -88,6 +88,9 @@ var (
 		ClientSecret: obscure.MustReveal(rcloneEncryptedClientSecret),
 		RedirectURL:  oauthutil.RedirectURL,
 	}
+
+	DriveConfig = driveConfig
+
 	_mimeTypeToExtensionDuplicates = map[string]string{
 		"application/x-vnd.oasis.opendocument.presentation": ".odp",
 		"application/x-vnd.oasis.opendocument.spreadsheet":  ".ods",
