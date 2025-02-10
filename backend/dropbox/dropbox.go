@@ -93,6 +93,7 @@ const (
 )
 
 var (
+	DropboxConfig = dropboxConfig
 	// Description of how to auth for this app
 	dropboxConfig = &oauthutil.Config{
 		Scopes: []string{

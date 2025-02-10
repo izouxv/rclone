@@ -111,4 +111,4 @@ func (s *defaultStorage) Serialize() (string, error) {
 }
 
 // Check the interface is satisfied
-var _ Storage = newDefaultStorage()
+var _ Storage = (*defaultStorage)(nil)

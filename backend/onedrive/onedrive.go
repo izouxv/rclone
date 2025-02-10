@@ -85,6 +85,8 @@ var (
 		RedirectURL:  oauthutil.RedirectLocalhostURL,
 	}
 
+	OauthConfig = oauthConfig
+
 	graphAPIEndpoint = map[string]string{
 		"global": "https://graph.microsoft.com",
 		"us":     "https://graph.microsoft.us",
