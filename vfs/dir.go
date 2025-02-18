@@ -216,6 +216,10 @@ func (d *Dir) setHasVirtual(hasVirtual bool) {
 // so could not be forgotten. Children which didn't have virtual entries and
 // children with virtual entries will be forgotten even if true is returned.
 func (d *Dir) ForgetAll() (hasVirtual bool) {
+	if d == nil {
+		return
+	}
+
 	d.mu.RLock()
 
 	fs.Debugf(d.path, "forgetting directory cache")

@@ -189,6 +189,7 @@ type VFS struct {
 var (
 	activeMu sync.Mutex
 	active   = map[string][]*VFS{}
+	Active   = active
 )
 
 // New creates a new VFS and root directory.  If opt is nil, then
