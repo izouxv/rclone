@@ -220,6 +220,11 @@ func (d *Dir) ForgetAll() (hasVirtual bool) {
 		return
 	}
 
+	defer func() {
+		// We should never panic here
+		_ = recover()
+	}()
+
 	d.mu.RLock()
 
 	fs.Debugf(d.path, "forgetting directory cache")
