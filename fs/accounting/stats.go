@@ -575,13 +575,18 @@ func (s *StatsInfo) Bytes(bytes int64) {
 	s.average.lpBytes += bytes
 	s.average.mu.Unlock()
 
+	Event(Progress, s)
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.bytes += bytes
+
 }
 
 // BytesNoNetwork updates the stats for bytes bytes but doesn't include the transfer stats
 func (s *StatsInfo) BytesNoNetwork(bytes int64) {
+	Event(Progress, s)
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	s.bytes += bytes
@@ -805,6 +810,7 @@ func (s *StatsInfo) DoneChecking(remote string) {
 	s.mu.Lock()
 	s.checks++
 	s.mu.Unlock()
+	Event(TransferDel, s)
 }
 
 // GetTransfers reads the number of transfers
@@ -826,7 +832,8 @@ func (s *StatsInfo) NewTransfer(obj fs.DirEntry, dstFs fs.Fs) *Transfer {
 	}
 	tr := newTransfer(s, obj, srcFs, dstFs)
 	s.transferring.add(tr)
-	s.resumeAverageLoop()
+	Event(TransferAdd, s)
+	s.startAverageLoop()
 	return tr
 }
 
@@ -834,7 +841,8 @@ func (s *StatsInfo) NewTransfer(obj fs.DirEntry, dstFs fs.Fs) *Transfer {
 func (s *StatsInfo) NewTransferRemoteSize(remote string, size int64, srcFs, dstFs fs.Fs) *Transfer {
 	tr := newTransferRemoteSize(s, remote, size, false, "", srcFs, dstFs)
 	s.transferring.add(tr)
-	s.resumeAverageLoop()
+	Event(TransferAdd, s)
+	s.startAverageLoop()
 	return tr
 }
 
@@ -843,6 +851,7 @@ func (s *StatsInfo) NewTransferRemoteSize(remote string, size int64, srcFs, dstF
 // if ok is true and it was in the transfermap (to avoid incrementing in case of nested calls, #6213) then it increments the transfers count
 func (s *StatsInfo) DoneTransferring(remote string, ok bool) {
 	existed := s.transferring.del(remote)
+	Event(TransferDel, s)
 	if ok && existed {
 		s.mu.Lock()
 		s.transfers++

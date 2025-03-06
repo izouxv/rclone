@@ -167,7 +167,7 @@ var (
 	// JobGetJobID for internal use only
 	JobGetJobID func(context.Context) (int64, bool)
 	// JobOnFinish for internal use only
-	JobOnFinish func(int64, func()) (func(), error)
+	JobOnFinish func(int64, func(interface{})) (func(), error)
 )
 
 // Get gets an fs.Fs named fsString either from the cache or creates it afresh
@@ -188,7 +188,7 @@ func Get(ctx context.Context, fsString string) (f fs.Fs, err error) {
 		if jobID, ok := JobGetJobID(ctx); ok {
 			// fs.Debugf(f, "Pin for job %d", jobID)
 			Pin(f)
-			_, _ = JobOnFinish(jobID, func() {
+			_, _ = JobOnFinish(jobID, func(interface{}) {
 				// fs.Debugf(f, "Unpin for job %d", jobID)
 				Unpin(f)
 			})
