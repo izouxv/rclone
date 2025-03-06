@@ -250,7 +250,9 @@ func (d *Dir) ForgetAll() (hasVirtual bool) {
 	// directory or any children
 	if !d.hasVirtual() {
 		d.items = make(map[string]Node)
-		d.cleanupTimer.Stop()
+		if d.cleanupTimer != nil {
+			d.cleanupTimer.Stop()
+		}
 	}
 
 	return d.hasVirtual()
