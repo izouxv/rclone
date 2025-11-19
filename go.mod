@@ -2,9 +2,7 @@ module github.com/rclone/rclone
 
 go 1.24.4
 
-godebug (
-    x509negativeserial=1
-)
+godebug x509negativeserial=1
 
 require (
 	bazil.org/fuse v0.0.0-20230120002735-62a210ff1fd5
@@ -90,12 +88,12 @@ require (
 	github.com/zeebo/xxh3 v1.0.2
 	go.etcd.io/bbolt v1.4.3
 	goftp.io/server/v2 v2.0.2
-	golang.org/x/crypto v0.43.0
-	golang.org/x/net v0.46.0
+	golang.org/x/crypto v0.44.0
+	golang.org/x/net v0.47.0
 	golang.org/x/oauth2 v0.33.0
 	golang.org/x/sync v0.18.0
 	golang.org/x/sys v0.38.0
-	golang.org/x/text v0.30.0
+	golang.org/x/text v0.31.0
 	golang.org/x/time v0.14.0
 	google.golang.org/api v0.255.0
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1
@@ -255,8 +253,8 @@ require (
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
 	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
-	golang.org/x/tools v0.38.0 // indirect
+	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6 // indirect
+	golang.org/x/tools v0.39.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251103181224-f26f9409b101 // indirect
 	google.golang.org/grpc v1.76.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
@@ -277,6 +275,16 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.2
 	github.com/pkg/xattr v0.4.12
 	github.com/pquerna/otp v1.5.0
-	golang.org/x/mobile v0.0.0-20251021151156-188f512ec823
-	golang.org/x/term v0.36.0
+	golang.org/x/term v0.37.0
+)
+
+exclude (
+	golang.org/x/exp v0.0.0-20190510132918-efd6b22b2522
+	golang.org/x/exp v0.0.0-20190829153037-c13cbed26979
+	golang.org/x/exp v0.0.0-20191030013958-a1ab85dbe136
+	golang.org/x/exp v0.0.0-20191129062945-2f5052295587
+	golang.org/x/exp v0.0.0-20191227195350-da58074b4299
+	golang.org/x/exp v0.0.0-20200119233911-0405dc783f0a
+	golang.org/x/exp v0.0.0-20200207192155-f17229e696bd
+	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6
 )
